@@ -3,8 +3,8 @@ const DEFAULT_TIMEOUT: number = 15000;
 
 /**
  * Aborts the request if the timeout expires before the response is received. The fetchOptions
- * object this link adds to the context must be included in the config object when instantiating the
- * apollo-link-http component like this:
+ * object that this link adds to the context must be included in the config object when
+ * instantiating the apollo-link-http component like this:
  *
  * import { createHttpLink } from "apollo-link-http";
  * ...
@@ -23,13 +23,14 @@ export default class TimeoutLink extends ApolloLink {
   request(operation: Operation, forward: NextLink) {
     let controller: AbortController;
 
-    // add abort controller and signal object to fetchOptions if supported by client
+    // add abort controller and signal object to fetchOptions if they don't already exist
     if (typeof AbortController !== 'undefined') {
       const context = operation.getContext();
+      let fetchOptions = context.fetchOptions || {};
 
-      controller = new AbortController();
+      controller = fetchOptions.controller || new AbortController();
 
-      const fetchOptions = { controller, signal: controller.signal, ...context.fetchOptions };
+      fetchOptions = { ...fetchOptions, controller, signal: controller.signal };
       context.setContext({ fetchOptions });
     }
 
