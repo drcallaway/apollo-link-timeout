@@ -13,14 +13,14 @@ const DEFAULT_TIMEOUT: number = 15000;
  * const link = createHttpLink({ uri: "/graphql", fetchOptions });
  */
 export default class TimeoutLink extends ApolloLink {
-  timeout: number;
+  private timeout: number;
 
   constructor(timeout: number) {
     super();
     this.timeout = timeout;
   }
 
-  request(operation: Operation, forward: NextLink) {
+  public request(operation: Operation, forward: NextLink) {
     let controller: AbortController;
 
     // add abort controller and signal object to fetchOptions if they don't already exist

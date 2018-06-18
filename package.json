@@ -1,5 +1,30 @@
 {
+  "name": "apollo-link-timeout",
+  "version": "0.0.1",
+  "description": "An Apollo link to abort requests that aren't completed within a timeout period",
   "dependencies": {
     "apollo-link": "^1.2.2"
-  }
+  },
+  "devDependencies": {
+    "tslint": "^5.8.0",
+    "typescript": "^2.9.2"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drcallaway/apollo-link-timeout"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint src/*.ts* src/**/*.ts*"
+  },
+  "keywords": [
+    "graphql",
+    "apollo",
+    "apollo-link",
+    "timeout"
+  ],
+  "author": "Dustin Callaway <drcallaway@gmail.com>",
+  "license": "MIT"
 }
