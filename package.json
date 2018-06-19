@@ -9,7 +9,6 @@
     "@types/graphql": "^0.13.1",
     "@types/jest": "^23.1.1",
     "@types/node": "^10.3.4",
-    "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "jest": "^23.1.0",
     "ts-jest": "^22.4.6",
@@ -26,7 +25,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint src/*.ts* src/**/*.ts*",
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "yarn lint && yarn test && yarn build"
   },
   "keywords": [
     "graphql",
@@ -36,6 +36,7 @@
   ],
   "author": "Dustin Callaway <drcallaway@gmail.com>",
   "license": "MIT",
+  "files": [ "lib" ],
   "jest": {
     "transform": {
       ".(ts|tsx)": "ts-jest"
