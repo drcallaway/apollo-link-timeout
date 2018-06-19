@@ -24,8 +24,8 @@
     "url": "https://github.com/drcallaway/apollo-link-timeout"
   },
   "scripts": {
-    "bundle": "webpack --mode=development && webpack --mode=production --output-filename [name].min.js",
     "build": "tsc --declaration",
+    "bundle": "webpack --mode=development && webpack --mode=production --output-filename [name].min.js",
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest"
   },

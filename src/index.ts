@@ -1,4 +1,5 @@
 import { ApolloLink, Observable, Operation, NextLink } from 'apollo-link';
+
 const DEFAULT_TIMEOUT: number = 15000;
 
 /**
