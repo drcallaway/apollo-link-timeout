@@ -24,6 +24,10 @@
   version "23.1.1"
   resolved "https://registry.npmjs.intuit.net/@/@types/jest/_attachments/jest-23.1.1.tgz#c54ab1a5f41aa693c0957222dd10414416d0c87b"
 
+"@types/node@^10.3.4":
+  version "10.3.4"
+  resolved "https://registry.npmjs.intuit.net/@/@types/node/_attachments/node-10.3.4.tgz#c74e8aec19e555df44609b8057311052a2c84d9e"
+
 "@webassemblyjs/ast@1.5.12":
   version "1.5.12"
   resolved "https://registry.npmjs.intuit.net/@/@webassemblyjs/ast/_attachments/ast-1.5.12.tgz#a9acbcb3f25333c4edfa1fdf3186b1ccf64e6664"
