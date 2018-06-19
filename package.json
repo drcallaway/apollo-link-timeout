@@ -17,8 +17,8 @@
     "tslint": "^5.8.0",
     "typescript": "^2.9.2"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/timeoutLink.js",
+  "types": "lib/timeoutLink.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/drcallaway/apollo-link-timeout"
@@ -40,7 +40,7 @@
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
-    "testRegex": "(/test/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",

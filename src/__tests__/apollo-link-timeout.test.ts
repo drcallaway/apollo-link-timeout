@@ -1,4 +1,4 @@
-import TimeoutLink from '../src/index';
+import TimeoutLink from '../timeoutLink';
 import { ApolloLink, execute, Observable } from 'apollo-link';
 import gql from 'graphql-tag';
 
