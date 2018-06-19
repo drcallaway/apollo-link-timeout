@@ -17,14 +17,15 @@
     "webpack": "^4.12.0",
     "webpack-command": "^0.2.1"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/drcallaway/apollo-link-timeout"
   },
   "scripts": {
-    "build": "webpack --mode=development && webpack --mode=production --output-filename [name].min.js",
+    "bundle": "webpack --mode=development && webpack --mode=production --output-filename [name].min.js",
+    "build": "tsc --declaration",
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest"
   },
@@ -49,7 +50,8 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/dist/"
+      "/dist/",
+      "/lib/"
     ]
   }
 }
