@@ -31,7 +31,7 @@ export default class TimeoutLink extends ApolloLink {
       controller = fetchOptions.controller || new AbortController();
 
       fetchOptions = { ...fetchOptions, controller, signal: controller.signal };
-      context.setContext({ fetchOptions });
+      operation.setContext({ fetchOptions });
     }
 
     const chainObservable = forward(operation); // observable for remaining link chain

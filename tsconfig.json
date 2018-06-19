@@ -2,17 +2,17 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es6", "dom"],
-    "module": "es2015",
+    "module": "es6",
     "moduleResolution": "node",
     "removeComments": false,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "noImplicitAny": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,
     "rootDir": "./src",
-    "outDir": "dist"
+    "outDir": "./build"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/__tests__/*.ts"]
