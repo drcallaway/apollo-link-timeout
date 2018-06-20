@@ -23,9 +23,9 @@ const timeoutLink = new ApolloLinkTimeout(10000); // 10 second timeout
 
 const httpLink = createHttpLink({ uri: "/graphql" });
 
-const linkChain = timeoutLink.concat(httpLink);
+const timeoutHttpLink = timeoutLink.concat(httpLink);
 
-const apolloClient = new ApolloClient({ link: linkChain });
+const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 
 // use timeout-enabled Apollo client...
 ```
