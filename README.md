@@ -4,7 +4,7 @@ An [Apollo Link](https://www.apollographql.com/docs/link/) that aborts a request
 
 ## Installation
 ```
-npm install apollo-link-timeout
+npm install apollo-link-timeout --save
 ```
 or
 ```
@@ -16,19 +16,16 @@ yarn add apollo-link-timeout
 import ApolloLinkTimeout from 'apollo-link-timeout';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 
 ...
 
-const TIMEOUT_IN_MS = 10000; // 10 second timeout
-const timeoutLink = new ApolloLinkTimeout(TIMEOUT_IN_MS);
+const timeoutLink = new ApolloLinkTimeout(10000); // 10 second timeout
 
 const httpLink = createHttpLink({ uri: "/graphql" });
 
 const linkChain = timeoutLink.concat(httpLink);
 
-const apolloClient = new ApolloClient( {
-  link: linkChain,
-  cache: new InMemoryCache()
-});
+const apolloClient = new ApolloClient({ link: linkChain });
+
+// use timeout-enabled Apollo client...
 ```
