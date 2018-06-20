@@ -17,7 +17,9 @@ import ApolloLinkTimeout from 'apollo-link-timeout';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+
 ...
+
 const TIMEOUT_IN_MS = 10000; // 10 second timeout
 const timeoutLink = new ApolloLinkTimeout(TIMEOUT_IN_MS);
 
