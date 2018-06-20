@@ -24,6 +24,9 @@
     "type": "git",
     "url": "https://github.com/drcallaway/apollo-link-timeout"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "tslint src/*.ts* src/**/*.ts*",
