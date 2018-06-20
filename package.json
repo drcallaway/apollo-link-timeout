@@ -1,7 +1,7 @@
 {
   "name": "apollo-link-timeout",
   "version": "1.0.0",
-  "description": "Abort requests that aren't completed within a specified timeout period",
+  "description": "Abort requests that take longer than a specified timeout period",
   "dependencies": {
     "apollo-link": "^1.2.2"
   },
