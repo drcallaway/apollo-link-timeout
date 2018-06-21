@@ -29,3 +29,5 @@ const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 
 // use timeout-enabled Apollo client...
 ```
+
+See [Apollo documentation](https://www.apollographql.com/client) for information on using the Apollo client.
