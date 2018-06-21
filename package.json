@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-timeout",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Abort requests that take longer than a specified timeout period",
   "dependencies": {
     "apollo-link": "^1.2.2"
@@ -12,7 +12,6 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "jest": "^23.1.0",
-    "np": "^3.0.4",
     "ts-jest": "^22.4.6",
     "ts-loader": "^4.4.1",
     "tslint": "^5.8.0",
@@ -32,7 +31,7 @@
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest",
     "prepublish": "yarn lint && yarn test && yarn build",
-    "deploy": "np"
+    "deploy": "yarn publish"
   },
   "keywords": [
     "graphql",
