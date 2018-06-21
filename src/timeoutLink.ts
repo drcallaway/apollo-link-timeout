@@ -10,7 +10,7 @@ export default class TimeoutLink extends ApolloLink {
 
   constructor(timeout: number) {
     super();
-    this.timeout = timeout;
+    this.timeout = timeout || 0;
   }
 
   public request(operation: Operation, forward: NextLink) {
@@ -28,6 +28,10 @@ export default class TimeoutLink extends ApolloLink {
     }
 
     const chainObservable = forward(operation); // observable for remaining link chain
+
+    if (this.timeout === 0) {
+      return chainObservable; // skip this link if no timeout is set
+    }
 
     // create local observable with timeout functionality (unsubscibe from chain observable and
     // return an error if the timeout expires before chain observable resolves)
