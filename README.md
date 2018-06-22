@@ -4,7 +4,7 @@ An [Apollo Link](https://www.apollographql.com/docs/link/) that aborts a request
 
 ## Installation
 ```
-npm install apollo-link-timeout --save
+npm install apollo-link-timeout
 ```
 or
 ```
