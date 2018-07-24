@@ -10,7 +10,7 @@ export default class TimeoutLink extends ApolloLink {
 
   constructor(timeout: number) {
     super();
-    this.timeout = timeout || 0;
+    this.timeout = timeout || DEFAULT_TIMEOUT;
   }
 
   public request(operation: Operation, forward: NextLink) {
@@ -29,7 +29,7 @@ export default class TimeoutLink extends ApolloLink {
 
     const chainObservable = forward(operation); // observable for remaining link chain
 
-    if (this.timeout === 0) {
+    if (this.timeout <= 0) {
       return chainObservable; // skip this link if no timeout is set
     }
 
@@ -53,7 +53,7 @@ export default class TimeoutLink extends ApolloLink {
 
         subscription.unsubscribe();
         observer.error(new Error('Timeout exceeded'));
-      }, this.timeout || DEFAULT_TIMEOUT);
+      }, this.timeout);
 
       // this function is called when a client unsubscribes from localObservable
       return () => {
