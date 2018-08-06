@@ -39,11 +39,18 @@ export default class TimeoutLink extends ApolloLink {
       let timer: NodeJS.Timer;
 
       // listen to chainObservable for result and pass to localObservable if received before timeout
-      const subscription = chainObservable.subscribe(result => {
-        clearTimeout(timer);
-        observer.next(result);
-        observer.complete();
-      });
+      const subscription = chainObservable.subscribe(
+        result => {
+          clearTimeout(timer);
+          observer.next(result);
+          observer.complete();
+        },
+        error => {
+          clearTimeout(timer);
+          observer.error(error);
+          observer.complete();
+        }
+      );
 
       // if timeout expires before observable completes, abort call, unsubscribe, and return error
       timer = setTimeout(() => {
