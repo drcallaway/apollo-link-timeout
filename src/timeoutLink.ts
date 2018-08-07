@@ -1,4 +1,5 @@
 import { ApolloLink, Observable, Operation, NextLink } from 'apollo-link';
+import { DefinitionNode } from 'graphql';
 
 const DEFAULT_TIMEOUT: number = 15000;
 
@@ -29,8 +30,8 @@ export default class TimeoutLink extends ApolloLink {
 
     const chainObservable = forward(operation); // observable for remaining link chain
 
-    const operationType =
-      operation.query.definitions.find(def => def.kind === 'OperationDefinition').operation;
+    const operationType = (operation.query.definitions as any).find(
+      (def: DefinitionNode) => def.kind === 'OperationDefinition').operation;
 
     if (this.timeout <= 0 || operationType === 'subscription') {
       return chainObservable; // skip this link if timeout is zero or it's a subscription request
