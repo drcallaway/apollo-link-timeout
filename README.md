@@ -1,6 +1,6 @@
 # apollo-link-timeout
 
-An [Apollo Link](https://www.apollographql.com/docs/link/) that aborts requests that aren't completed within a specified timeout period. See the NPM page [here](https://www.npmjs.com/package/apollo-link-timeout).
+An [Apollo Link](https://www.apollographql.com/docs/link/) that aborts requests that aren't completed within a specified timeout period. Note that timeouts are enforced for query and mutation operations only (not subscriptions).
 
 ## Installation
 ```
@@ -31,3 +31,4 @@ const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 ```
 
 See [Apollo documentation](https://www.apollographql.com/client) for information on using the Apollo client.
+See the NPM page [here](https://www.npmjs.com/package/apollo-link-timeout).
