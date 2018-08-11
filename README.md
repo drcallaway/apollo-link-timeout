@@ -31,4 +31,3 @@ const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 ```
 
 See [Apollo documentation](https://www.apollographql.com/client) for information on using the Apollo client.
-See the NPM page [here](https://www.npmjs.com/package/apollo-link-timeout).
