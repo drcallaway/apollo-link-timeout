@@ -62,8 +62,8 @@ export default class TimeoutLink extends ApolloLink {
           controller.abort(); // abort fetch operation
         }
 
-        subscription.unsubscribe();
         observer.error(new Error('Timeout exceeded'));
+        subscription.unsubscribe();
       }, this.timeout);
 
       // this function is called when a client unsubscribes from localObservable
