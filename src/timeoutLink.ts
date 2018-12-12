@@ -16,6 +16,12 @@ export default class TimeoutLink extends ApolloLink {
 
   public request(operation: Operation, forward: NextLink) {
     let controller: AbortController;
+    
+    // override timeout from query context
+    var ctxTimeout = operation.getContext().timeout || null;
+    if(ctxTimeout <= 0) {
+      ctxTimeout = null;
+    }
 
     // add abort controller and signal object to fetchOptions if they don't already exist
     if (typeof AbortController !== 'undefined') {
@@ -64,7 +70,7 @@ export default class TimeoutLink extends ApolloLink {
 
         observer.error(new Error('Timeout exceeded'));
         subscription.unsubscribe();
-      }, this.timeout);
+      }, ctxTimeout || this.timeout);
 
       // this function is called when a client unsubscribes from localObservable
       return () => {
