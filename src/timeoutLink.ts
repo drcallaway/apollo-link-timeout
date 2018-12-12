@@ -16,9 +16,10 @@ export default class TimeoutLink extends ApolloLink {
 
   public request(operation: Operation, forward: NextLink) {
     let controller: AbortController;
-    
+    let ctxTimeout: number;
+
     // override timeout from query context
-    var ctxTimeout = operation.getContext().timeout || null;
+    ctxTimeout = operation.getContext().timeout || null;
     if(ctxTimeout <= 0) {
       ctxTimeout = null;
     }
