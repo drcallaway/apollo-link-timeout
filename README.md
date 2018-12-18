@@ -28,6 +28,17 @@ const timeoutHttpLink = timeoutLink.concat(httpLink);
 const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 
 // use timeout-enabled Apollo client...
+
+// Override timeout from any query 
+<Query
+ query={SOME_QUERY}
+ variables={{
+    someVar1: "foo",
+    someVar2: "bar",
+   }}
+  context={{ timeout: 3000 }}
+>
+// ...
 ```
 
 See [Apollo documentation](https://www.apollographql.com/client) for information on using the Apollo client.
