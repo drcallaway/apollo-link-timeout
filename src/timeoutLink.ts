@@ -72,6 +72,17 @@ export default class TimeoutLink extends ApolloLink {
         observer.error(new Error('Timeout exceeded'));
         subscription.unsubscribe();
       }, ctxTimeout || this.timeout);
+      
+      let ctxRef = operation.getContext().timeoutRef
+
+      if (ctxRef) {
+        ctxRef({
+          unsubscribe: () => {
+            clearTimeout(timer)
+            subscription.unsubscribe()
+          }
+        })
+      }
 
       // this function is called when a client unsubscribes from localObservable
       return () => {
