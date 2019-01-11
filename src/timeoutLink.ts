@@ -81,7 +81,7 @@ export default class TimeoutLink extends ApolloLink {
             clearTimeout(timer);
             subscription.unsubscribe();
           }
-        })
+        });
       }
 
       // this function is called when a client unsubscribes from localObservable
