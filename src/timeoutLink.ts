@@ -73,13 +73,13 @@ export default class TimeoutLink extends ApolloLink {
         subscription.unsubscribe();
       }, ctxTimeout || this.timeout);
       
-      let ctxRef = operation.getContext().timeoutRef
+      let ctxRef = operation.getContext().timeoutRef;
 
       if (ctxRef) {
         ctxRef({
           unsubscribe: () => {
-            clearTimeout(timer)
-            subscription.unsubscribe()
+            clearTimeout(timer);
+            subscription.unsubscribe();
           }
         })
       }
