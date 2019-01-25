@@ -31,7 +31,7 @@
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest",
     "prepublish": "yarn lint && yarn test && yarn build",
-    "deploy": "yarn publish"
+    "deploy": "yarn publish && git push"
   },
   "keywords": [
     "graphql",
