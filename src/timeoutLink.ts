@@ -72,7 +72,7 @@ export default class TimeoutLink extends ApolloLink {
         observer.error(new Error('Timeout exceeded'));
         subscription.unsubscribe();
       }, ctxTimeout || this.timeout);
-      
+
       let ctxRef = operation.getContext().timeoutRef;
 
       if (ctxRef) {
