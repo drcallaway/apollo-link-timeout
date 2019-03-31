@@ -1,5 +1,6 @@
 import { ApolloLink, Observable, Operation, NextLink } from 'apollo-link';
 import { DefinitionNode } from 'graphql';
+import TimeoutError from './TimeoutError';
 
 const DEFAULT_TIMEOUT: number = 15000;
 
@@ -20,7 +21,7 @@ export default class TimeoutLink extends ApolloLink {
 
     // override timeout from query context
     ctxTimeout = operation.getContext().timeout || null;
-    if(ctxTimeout <= 0) {
+    if (ctxTimeout <= 0) {
       ctxTimeout = null;
     }
 
@@ -38,7 +39,8 @@ export default class TimeoutLink extends ApolloLink {
     const chainObservable = forward(operation); // observable for remaining link chain
 
     const operationType = (operation.query.definitions as any).find(
-      (def: DefinitionNode) => def.kind === 'OperationDefinition').operation;
+      (def: DefinitionNode) => def.kind === 'OperationDefinition'
+    ).operation;
 
     if (this.timeout <= 0 || operationType === 'subscription') {
       return chainObservable; // skip this link if timeout is zero or it's a subscription request
@@ -69,7 +71,7 @@ export default class TimeoutLink extends ApolloLink {
           controller.abort(); // abort fetch operation
         }
 
-        observer.error(new Error('Timeout exceeded'));
+        observer.error(new TimeoutError('Timeout exceeded'));
         subscription.unsubscribe();
       }, ctxTimeout || this.timeout);
 
