@@ -17,13 +17,9 @@ export default class TimeoutLink extends ApolloLink {
 
   public request(operation: Operation, forward: NextLink) {
     let controller: AbortController;
-    let ctxTimeout: number;
 
     // override timeout from query context
-    ctxTimeout = operation.getContext().timeout || null;
-    if (ctxTimeout <= 0) {
-      ctxTimeout = null;
-    }
+    const requestTimeout = operation.getContext().timeout || this.timeout;
 
     // add abort controller and signal object to fetchOptions if they don't already exist
     if (typeof AbortController !== 'undefined') {
@@ -42,14 +38,14 @@ export default class TimeoutLink extends ApolloLink {
       (def: DefinitionNode) => def.kind === 'OperationDefinition'
     ).operation;
 
-    if (this.timeout <= 0 || operationType === 'subscription') {
+    if (requestTimeout <= 0 || operationType === 'subscription') {
       return chainObservable; // skip this link if timeout is zero or it's a subscription request
     }
 
     // create local observable with timeout functionality (unsubscibe from chain observable and
     // return an error if the timeout expires before chain observable resolves)
     const localObservable = new Observable(observer => {
-      let timer: NodeJS.Timer;
+      let timer: number;
 
       // listen to chainObservable for result and pass to localObservable if received before timeout
       const subscription = chainObservable.subscribe(
@@ -66,14 +62,14 @@ export default class TimeoutLink extends ApolloLink {
       );
 
       // if timeout expires before observable completes, abort call, unsubscribe, and return error
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         if (controller) {
           controller.abort(); // abort fetch operation
         }
 
-        observer.error(new TimeoutError('Timeout exceeded'));
+        observer.error(new TimeoutError('Timeout exceeded', requestTimeout));
         subscription.unsubscribe();
-      }, ctxTimeout || this.timeout);
+      }, requestTimeout);
 
       let ctxRef = operation.getContext().timeoutRef;
 

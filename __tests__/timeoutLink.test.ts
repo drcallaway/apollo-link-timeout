@@ -55,7 +55,9 @@ test('long request times out', done => {
       done();
     },
     error(error) {
-      expect(error.message).toBe('Timeout exceeded');
+      expect(error.message).toEqual('Timeout exceeded');
+      expect(error.timeout).toEqual(100);
+      expect(error.statusCode).toEqual(408);
       done();
     }
   });
