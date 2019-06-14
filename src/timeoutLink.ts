@@ -62,7 +62,7 @@ export default class TimeoutLink extends ApolloLink {
       );
 
       // if timeout expires before observable completes, abort call, unsubscribe, and return error
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         if (controller) {
           controller.abort(); // abort fetch operation
         }
