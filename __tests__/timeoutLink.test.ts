@@ -62,3 +62,37 @@ test('long request times out', done => {
     }
   });
 });
+
+test('configured value through context does not time out', done => {
+  delay = 200;
+  const configured = 500;
+
+  execute(link, { query, context: { timeout: configured } }).subscribe({
+    next() {
+      expect(called).toBe(1);
+      done();
+    },
+    error(error) {
+      expect('error called').toBeFalsy();
+      done();
+    }
+  });
+});
+
+test('configured short value through context time out', done => {
+  delay = 200;
+  const configured = 100;
+
+  execute(link, { query, context: { timeout: configured } }).subscribe({
+    next() {
+      expect('next called').toBeFalsy();
+      done();
+    },
+    error(error) {
+      expect(error.message).toEqual('Timeout exceeded');
+      expect(error.timeout).toEqual(configured);
+      expect(error.statusCode).toEqual(408);
+      done();
+    }
+  });
+});
