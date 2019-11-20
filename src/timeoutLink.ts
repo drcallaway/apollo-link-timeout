@@ -3,16 +3,19 @@ import { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError';
 
 const DEFAULT_TIMEOUT: number = 15000;
+const DEFAULT_STATUS_CODE = 408;
 
 /**
  * Aborts the request if the timeout expires before the response is received.
  */
 export default class TimeoutLink extends ApolloLink {
   private timeout: number;
+  private statusCode: number;
 
-  constructor(timeout: number) {
+  constructor(timeout: number, statusCode: number = DEFAULT_STATUS_CODE) {
     super();
     this.timeout = timeout || DEFAULT_TIMEOUT;
+    this.statusCode = statusCode;
   }
 
   public request(operation: Operation, forward: NextLink) {
@@ -67,7 +70,7 @@ export default class TimeoutLink extends ApolloLink {
           controller.abort(); // abort fetch operation
         }
 
-        observer.error(new TimeoutError('Timeout exceeded', requestTimeout));
+        observer.error(new TimeoutError('Timeout exceeded', requestTimeout, this.statusCode));
         subscription.unsubscribe();
       }, requestTimeout);
 
