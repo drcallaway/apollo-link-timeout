@@ -3,16 +3,15 @@ import { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError';
 
 const DEFAULT_TIMEOUT: number = 15000;
-const DEFAULT_STATUS_CODE = 408;
 
 /**
  * Aborts the request if the timeout expires before the response is received.
  */
 export default class TimeoutLink extends ApolloLink {
   private timeout: number;
-  private statusCode: number;
+  private statusCode?: number;
 
-  constructor(timeout: number, statusCode: number = DEFAULT_STATUS_CODE) {
+  constructor(timeout: number, statusCode?: number) {
     super();
     this.timeout = timeout || DEFAULT_TIMEOUT;
     this.statusCode = statusCode;
