@@ -67,6 +67,16 @@ export default class TimeoutLink extends ApolloLink {
       timer = setTimeout(() => {
         if (controller) {
           controller.abort(); // abort fetch operation
+
+          // if the AbortController in the operation context is one we created,
+          // it's now "used up", so we need to remove it to avoid blocking any
+          // future retry of the operation.
+          const context = operation.getContext();
+          let fetchOptions = context.fetchOptions || {};
+          if(fetchOptions.controller === controller && fetchOptions.signal === controller.signal) {
+             fetchOptions = { ...fetchOptions, controller: null, signal: null };
+             operation.setContext({ fetchOptions });
+          }
         }
 
         observer.error(new TimeoutError('Timeout exceeded', requestTimeout, this.statusCode));
