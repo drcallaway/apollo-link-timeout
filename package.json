@@ -2,16 +2,17 @@
   "name": "apollo-link-timeout",
   "version": "1.4.1",
   "description": "Abort requests that take longer than a specified timeout period",
-  "dependencies": {
-    "apollo-link": "^1.2.2"
+  "peerDependencies": {
+    "@apollo/client": "^3.0.0"
   },
   "devDependencies": {
-    "@types/graphql": "^0.13.1",
+    "@apollo/client": "^3.1.3",
     "@types/jest": "^23.1.1",
     "@types/node": "^10.3.4",
-    "graphql": "^0.13.2",
-    "graphql-tag": "^2.9.2",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.11.0",
     "jest": "^23.1.0",
+    "react": "^16.13.1",
     "ts-jest": "^22.4.6",
     "ts-loader": "^4.4.1",
     "tslint": "^5.8.0",

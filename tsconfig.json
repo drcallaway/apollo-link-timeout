@@ -3,6 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "removeComments": false,
     "sourceMap": true,
     "declaration": true,

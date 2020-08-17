@@ -1,5 +1,5 @@
 import TimeoutLink from '../src/timeoutLink';
-import { ApolloLink, execute, Observable } from 'apollo-link';
+import { ApolloLink, execute, Observable } from '@apollo/client';
 import gql from 'graphql-tag';
 
 const TEST_TIMEOUT = 100;
