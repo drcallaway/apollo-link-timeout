@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-timeout",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Abort requests that take longer than a specified timeout period",
   "peerDependencies": {
     "@apollo/client": "^3.0.0"
