@@ -12,7 +12,7 @@ yarn add apollo-link-timeout
 ```
 
 ## Usage
-```
+```javascript
 import ApolloLinkTimeout from 'apollo-link-timeout';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloClient } from 'apollo-client';
