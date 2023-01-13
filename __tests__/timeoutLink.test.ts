@@ -96,3 +96,23 @@ test('configured short value through context time out', done => {
     }
   });
 });
+
+test('aborted request does not timeout', done => {
+  delay = 200;
+
+  const controller = new AbortController();
+  const fetchOptions = { controller, signal: controller.signal }
+
+  controller.abort();
+
+  execute(link, { query, context: { fetchOptions } }).subscribe({
+    next() {
+      expect(called).toBe(1);
+      done();
+    },
+    error() {
+      expect('error called').toBeFalsy();
+      done();
+    }
+  });
+});
