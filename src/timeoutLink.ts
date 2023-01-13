@@ -95,14 +95,16 @@ export default class TimeoutLink extends ApolloLink {
         subscription.unsubscribe();
       };
 
-      // cancel timeout if aborted from somewhere else
-      controller.signal.addEventListener("abort", () => {
-        cancelTimeout();
-      });
-
       let ctxRef = operation.getContext().timeoutRef;
       if (ctxRef) {
         ctxRef({ unsubscribe: cancelTimeout });
+      }
+
+      if (controller) {
+        // cancel timeout if aborted from somewhere else
+        controller.signal.addEventListener("abort", () => {
+          cancelTimeout();
+        });
       }
 
       // this function is called when a client unsubscribes from localObservable
