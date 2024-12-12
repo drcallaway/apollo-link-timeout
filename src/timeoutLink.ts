@@ -8,13 +8,11 @@ const DEFAULT_TIMEOUT: number = 15000;
  * Aborts the request if the timeout expires before the response is received.
  */
 export default class TimeoutLink extends ApolloLink {
-  private timeout: number;
-  private statusCode?: number;
-
-  constructor(timeout: number, statusCode?: number) {
+  constructor(
+      private timeout: number = DEFAULT_TIMEOUT,
+      private statusCode?: number
+  ) {
     super();
-    this.timeout = timeout || DEFAULT_TIMEOUT;
-    this.statusCode = statusCode;
   }
 
   public request(operation: Operation, forward: NextLink) {

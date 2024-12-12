@@ -13,9 +13,9 @@ const query = gql`
   }
 }`;
 
-let called, delay;
+let called: number, delay: number;
 
-const mockLink = new ApolloLink(operation => {
+const mockLink = new ApolloLink(() => {
   called++;
   return new Observable(observer => {
     setTimeout(() => {
@@ -72,7 +72,7 @@ test('configured value through context does not time out', done => {
       expect(called).toBe(1);
       done();
     },
-    error(error) {
+    error() {
       expect('error called').toBeFalsy();
       done();
     }
