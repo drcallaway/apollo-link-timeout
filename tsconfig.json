@@ -6,7 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "removeComments": false,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "noImplicitAny": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
@@ -15,5 +15,4 @@
     "outDir": "./lib"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/__tests__/*.ts"]
 }
