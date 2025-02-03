@@ -43,7 +43,8 @@
   "author": "Dustin Callaway <drcallaway@gmail.com>",
   "license": "MIT",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "jest": {
     "transform": {
