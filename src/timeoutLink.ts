@@ -79,10 +79,9 @@ export default class TimeoutLink extends ApolloLink {
           // it's now "used up", so we need to remove it to avoid blocking any
           // future retry of the operation.
           const context = operation.getContext();
-          let fetchOptions = context.fetchOptions || {};
+          const fetchOptions = context.fetchOptions || {};
           if(fetchOptions.controller === ourController && fetchOptions.signal === ourController.signal) {
-             fetchOptions = { ...fetchOptions, controller: undefined, signal: undefined };
-             operation.setContext({ fetchOptions });
+             operation.setContext({ ...fetchOptions, controller: undefined, signal: undefined });
           }
         }
 
@@ -95,17 +94,15 @@ export default class TimeoutLink extends ApolloLink {
         subscription.unsubscribe();
       };
 
-      let ctxRef = operation.getContext().timeoutRef;
+      const ctxRef = operation.getContext().timeoutRef;
       if (ctxRef) {
         ctxRef({ unsubscribe: cancelTimeout });
       }
 
-      if (controller) {
-        // cancel timeout if aborted from somewhere else
-        controller.signal.addEventListener("abort", () => {
-          cancelTimeout();
-        });
-      }
+      // cancel timeout if aborted from somewhere else
+      controller.signal.addEventListener("abort", () => {
+        cancelTimeout();
+      }, { once: true });
 
       // this function is called when a client unsubscribes from localObservable
       return cancelTimeout;
