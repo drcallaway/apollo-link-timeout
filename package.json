@@ -18,8 +18,15 @@
     "tslint": "^5.8.0",
     "typescript": "^2.9.2"
   },
-  "main": "lib/timeoutLink.js",
-  "types": "lib/timeoutLink.d.ts",
+  "main": "./lib/cjs/cjs.js",
+  "types": "./lib/types/timeoutLink.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/timeoutLink.js",
+      "require": "./lib/cjs/cjs.js",
+      "types": "./lib/types/timeoutLink.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/drcallaway/apollo-link-timeout"
@@ -28,7 +35,10 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "yarn build:cjs && yarn build:esm && yarn build:types",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json",
+    "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\": \"module\"}' > lib/esm/package.json",
+    "build:types":  "tsc -p tsconfig.types.json",
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest",
     "prepublish": "yarn lint && yarn test && yarn build",
@@ -43,7 +53,8 @@
   "author": "Dustin Callaway <drcallaway@gmail.com>",
   "license": "MIT",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "jest": {
     "transform": {
