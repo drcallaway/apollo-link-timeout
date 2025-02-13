@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-timeout",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Abort requests that take longer than a specified timeout period",
   "peerDependencies": {
     "@apollo/client": "^3.0.0"
@@ -38,7 +38,7 @@
     "build": "yarn build:cjs && yarn build:esm && yarn build:types",
     "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json",
     "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\": \"module\"}' > lib/esm/package.json",
-    "build:types":  "tsc -p tsconfig.types.json",
+    "build:types": "tsc -p tsconfig.types.json",
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest",
     "prepublish": "yarn lint && yarn test && yarn build",
