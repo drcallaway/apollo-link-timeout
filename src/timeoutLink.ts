@@ -1,4 +1,4 @@
-import { ApolloLink, Observable, Operation, NextLink } from '@apollo/client/core';
+import { ApolloLink, Observable, type Operation, type NextLink } from '@apollo/client/core';
 import { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError';
 
