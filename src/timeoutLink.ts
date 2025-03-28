@@ -1,5 +1,5 @@
-import { ApolloLink, Observable, type Operation, type NextLink } from '@apollo/client/core/index.js';
-import { DefinitionNode } from 'graphql';
+import { ApolloLink, Observable, type Operation, type NextLink } from '@apollo/client/core';
+import type { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError.js';
 
 const DEFAULT_TIMEOUT: number = 15000;

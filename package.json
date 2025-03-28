@@ -35,8 +35,8 @@
   },
   "scripts": {
     "build": "yarn build:cjs && yarn build:esm && yarn build:types",
-    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json && node scripts/fix_apollo_import.mjs",
-    "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\": \"module\"}' > lib/esm/package.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json",
+    "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\": \"module\"}' > lib/esm/package.json && node scripts/fix_apollo_import.mjs",
     "build:types": "tsc -p tsconfig.types.json",
     "lint": "tslint src/*.ts* src/**/*.ts*",
     "test": "jest",
@@ -68,7 +68,6 @@
       "json"
     ],
     "moduleNameMapper": {
-      "@apollo\/client\/core\/index.js$": "@apollo/client/core",
       "(.+)\\.js": "$1"
     },
     "testEnvironment": "jsdom",
