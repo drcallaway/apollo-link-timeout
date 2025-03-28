@@ -1,3 +1,4 @@
+// note, this import is modified when building for ESM via `script/fix_apollo_import.mjs`
 import { ApolloLink, Observable, type Operation, type NextLink } from '@apollo/client/core';
 import type { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError.js';
