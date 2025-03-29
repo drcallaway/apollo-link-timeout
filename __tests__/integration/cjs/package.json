@@ -8,7 +8,7 @@
     "@apollo/client": "^3.13.5",
     "apollo-link-timeout": "../../../",
     "graphql": "^16.10.0",
-    "rimraf": "^5.0.10"
+    "rimraf": "^4.4.1"
   },
   "scripts": {
     "postinstall": "rimraf node_modules/apollo-link-timeout/node_modules"
