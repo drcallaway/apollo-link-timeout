@@ -12,7 +12,14 @@ export default class TimeoutLink extends ApolloLink {
   private timeout: number;
   private statusCode?: number;
 
-  constructor(timeout: number, statusCode?: number) {
+  /**
+   * Creates a new TimeoutLink instance.
+   * Aborts the request if the timeout expires before the response is received.
+   *
+   * @param timeout - The timeout in milliseconds for the request. Default is 15000ms (15 seconds).
+   * @param statusCode - The HTTP status code to return when a timeout occurs. Default is 408 (Request Timeout).
+   */
+  constructor(timeout?: number, statusCode?: number) {
     super();
     this.timeout = timeout || DEFAULT_TIMEOUT;
     this.statusCode = statusCode;
