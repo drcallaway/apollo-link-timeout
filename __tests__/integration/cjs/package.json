@@ -1,0 +1,16 @@
+{
+  "name": "apollo-link-timeout-cjs-test",
+  "version": "1.0.0",
+  "main": "index.cjs",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.13.5",
+    "apollo-link-timeout": "../../../",
+    "graphql": "^16.10.0",
+    "rimraf": "^6.0.1"
+  },
+  "scripts": {
+    "postinstall": "rimraf node_modules/apollo-link-timeout/node_modules"
+  }
+}

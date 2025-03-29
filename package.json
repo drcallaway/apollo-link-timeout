@@ -39,8 +39,10 @@
     "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\": \"module\"}' > lib/esm/package.json && node scripts/fix_apollo_import.mjs",
     "build:types": "tsc -p tsconfig.types.json",
     "lint": "tslint src/*.ts* src/**/*.ts*",
-    "test": "jest",
-    "prepublish": "yarn lint && yarn test && yarn build",
+    "test": "yarn test:unit && yarn test:integration",
+    "test:integration": "node __tests__/integration/run.mjs",
+    "test:unit": "jest",
+    "prepublish": "yarn lint && yarn test:unit && yarn build",
     "deploy": "yarn publish && git push"
   },
   "keywords": [
@@ -72,6 +74,7 @@
     },
     "testEnvironment": "jsdom",
     "testPathIgnorePatterns": [
+      "__tests__/integration/",
       "/node_modules/",
       "/lib/"
     ],
