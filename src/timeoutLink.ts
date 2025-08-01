@@ -32,6 +32,14 @@ export default class TimeoutLink extends ApolloLink {
     // override timeout from query context
     const requestTimeout = operation.getContext().timeout || this.timeout;
 
+    const operationType = (operation.query.definitions as any).find(
+      (def: DefinitionNode) => def.kind === 'OperationDefinition'
+    ).operation;
+
+    if (requestTimeout <= 0 || operationType === 'subscription') {
+      return forward(operation); // skip this link if timeout is zero or it's a subscription request
+    }
+
     // add abort controller and signal object to fetchOptions if they don't already exist
     if (typeof AbortController !== 'undefined') {
       const context = operation.getContext();
@@ -45,14 +53,6 @@ export default class TimeoutLink extends ApolloLink {
     }
 
     const chainObservable = forward(operation); // observable for remaining link chain
-
-    const operationType = (operation.query.definitions as any).find(
-      (def: DefinitionNode) => def.kind === 'OperationDefinition'
-    ).operation;
-
-    if (requestTimeout <= 0 || operationType === 'subscription') {
-      return chainObservable; // skip this link if timeout is zero or it's a subscription request
-    }
 
     // create local observable with timeout functionality (unsubscibe from chain observable and
     // return an error if the timeout expires before chain observable resolves)
