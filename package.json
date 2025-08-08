@@ -6,7 +6,7 @@
     "@apollo/client": "^3.0.0"
   },
   "devDependencies": {
-    "@apollo/client": "^3.1.3",
+    "@apollo/client": "^3.13.9",
     "@types/jest": "^23.1.1",
     "@types/node": "^10.3.4",
     "graphql": "^15.3.0",
@@ -72,13 +72,17 @@
     "moduleNameMapper": {
       "(.+)\\.js": "$1"
     },
-    "testEnvironment": "jsdom",
+    "testEnvironment": "./__tests__/fixedEnvironment.js",
+    "transformIgnorePatterns": [
+      "__tests__/fixedEnvironment.js",
+      "/node_modules/"
+    ],
     "testPathIgnorePatterns": [
       "__tests__/integration/",
       "/node_modules/",
       "/lib/"
     ],
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
     "transform": {
       ".(ts|tsx)": "ts-jest"
     }
