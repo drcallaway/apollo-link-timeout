@@ -3,11 +3,15 @@ const JSDOMEnvironment = require("jest-environment-jsdom").default;
 class MyJSDOMEnvironment extends JSDOMEnvironment {
   constructor(...args) {
     super(...args);
-    this.global.Request = Request;
-    this.global.Response = Response;
-    this.global.fetch = fetch;
-    this.global.TextEncoder = TextEncoder;
-    this.global.TextDecoder = TextDecoder;
+
+    const [major] = process.versions.node.split(".").map(Number);
+    if (major >= 20) {
+      this.global.Request = Request;
+      this.global.Response = Response;
+      this.global.fetch = fetch;
+      this.global.TextEncoder = TextEncoder;
+      this.global.TextDecoder = TextDecoder;
+    }
   }
 }
 

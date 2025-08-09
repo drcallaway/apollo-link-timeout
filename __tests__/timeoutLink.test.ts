@@ -6,6 +6,8 @@ const TEST_TIMEOUT = 100;
 
 const timeoutLink: TimeoutLink = new TimeoutLink(TEST_TIMEOUT);
 
+const [nodeMajor] = process.versions.node.split(".").map(Number);
+
 const query = gql`
 {
   foo {
@@ -118,6 +120,7 @@ test('aborted request does not timeout', done => {
   });
 });
 
+if (nodeMajor >= 20) {
 test("HTTP multipart subscription stops when unsubscribed", (done) => {
   const subscription = gql`
     subscription {
@@ -156,7 +159,9 @@ test("HTTP multipart subscription stops when unsubscribed", (done) => {
     | { type: "done" }
     | { type: "error"; error: unknown }
   > = [];
-  const subsciption = execute(terminalLink, { query: subscription }).subscribe({
+    const subsciption = execute(terminalLink, {
+      query: subscription,
+    }).subscribe({
     next: (result) => events.push({ type: "next", result }),
     error: (error) => events.push({ type: "error", error }),
     complete: () => events.push({ type: "done" }),
@@ -186,3 +191,4 @@ Content-Type: application/json
     });
   }, 10);
 });
+}
