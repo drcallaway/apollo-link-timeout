@@ -121,74 +121,72 @@ test('aborted request does not timeout', done => {
 });
 
 if (nodeMajor >= 20) {
-test("HTTP multipart subscription stops when unsubscribed", (done) => {
-  const subscription = gql`
-    subscription {
-      chunk
-    }
-  `;
+  test("HTTP multipart subscription stops when unsubscribed", (done) => {
+    const subscription = gql`
+      subscription {
+        chunk
+      }
+    `;
 
-  const Transform: typeof TransformStream =
-    require("node:stream/web").TransformStream;
-  const encoder = new TextEncoder();
-  const stream = new Transform({
-    transform(chunk, controller) {
-      controller.enqueue(
-        encoder.encode(chunk.trimLeft().replace(/\n/g, "\r\n"))
-      );
-    },
-  });
-  let finalSignal: AbortSignal | undefined;
-  const terminalLink = timeoutLink.concat(
-    new HttpLink({
-    uri: "https://example.com/graphql",
-      fetch: (_, { signal }) => {
-        finalSignal = signal;
-        return Promise.resolve(
-        new Response(stream.readable, {
-          status: 200,
-          headers: { "content-type": "multipart/mixed" },
-        })
+    const Transform: typeof TransformStream =
+      require("node:stream/web").TransformStream;
+    const encoder = new TextEncoder();
+    const stream = new Transform({
+      transform(chunk, controller) {
+        controller.enqueue(
+          encoder.encode(chunk.trimLeft().replace(/\n/g, "\r\n"))
         );
       },
-    })
-  );
-
-  let events: Array<
-    | { type: "next"; result: unknown }
-    | { type: "done" }
-    | { type: "error"; error: unknown }
-  > = [];
+    });
+    let finalSignal: AbortSignal | undefined;
+    const terminalLink = timeoutLink.concat(
+      new HttpLink({
+      uri: "https://example.com/graphql",
+        fetch: (_, { signal }) => {
+          finalSignal = signal;
+          return Promise.resolve(
+            new Response(stream.readable, {
+              status: 200,
+              headers: { "content-type": "multipart/mixed" },
+            })
+          );
+        },
+      })
+    );
+  
+    let events: Array<
+      | { type: "next"; result: unknown }
+      | { type: "done" }
+      | { type: "error"; error: unknown }
+    > = [];
     const subsciption = execute(terminalLink, {
-      query: subscription,
-    }).subscribe({
-    next: (result) => events.push({ type: "next", result }),
-    error: (error) => events.push({ type: "error", error }),
-    complete: () => events.push({ type: "done" }),
-  });
-
-  const writer = stream.writable.getWriter();
-
-  writer.write(
-    `
+        query: subscription,
+      }).subscribe({
+      next: (result) => events.push({ type: "next", result }),
+      error: (error) => events.push({ type: "error", error }),
+      complete: () => events.push({ type: "done" }),
+    });
+  
+    const writer = stream.writable.getWriter();
+  
+    writer.write(`
 ---
 Content-Type: application/json
 
 {"data":{"chunk": "first"}}
 ---
-`
-  );
-
-  setTimeout(() => {
-    expect(events).toStrictEqual([
-      { type: "next", result: { data: { chunk: "first" } } },
-    ]);
-    subsciption.unsubscribe();
-
+    `.trim());
+  
     setTimeout(() => {
-      expect(finalSignal?.aborted).toBeTruthy();
-      done();
-    });
-  }, 10);
-});
+      expect(events).toStrictEqual([
+        { type: "next", result: { data: { chunk: "first" } } },
+      ]);
+      subsciption.unsubscribe();
+  
+      setTimeout(() => {
+        expect(finalSignal?.aborted).toBeTruthy();
+        done();
+      });
+    }, 10);
+  });
 }
