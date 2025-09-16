@@ -1,5 +1,5 @@
 // note, this import is modified when building for ESM via `script/fix_apollo_import.mjs`
-import { ApolloLink, Observable, type Operation, type NextLink } from '@apollo/client/core';
+import { ApolloLink, Observable, type Operation, type NextLink, type FetchResult } from '@apollo/client/core';
 import type { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError.js';
 
@@ -25,7 +25,7 @@ export default class TimeoutLink extends ApolloLink {
     this.statusCode = statusCode;
   }
 
-  public request(operation: Operation, forward: NextLink) {
+  public request(operation: Operation, forward: NextLink): Observable<FetchResult> {
     let controller: AbortController;
     let ourController: AbortController;
 
