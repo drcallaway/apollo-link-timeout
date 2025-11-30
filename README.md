@@ -12,6 +12,7 @@ yarn add apollo-link-timeout
 ```
 
 ## Usage
+
 ```javascript
 import ApolloLinkTimeout from 'apollo-link-timeout';
 import { createHttpLink } from 'apollo-link-http';
@@ -29,7 +30,7 @@ const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 
 // use timeout-enabled Apollo client...
 
-// Override timeout from any query 
+// Override timeout from any query
 <Query
  query={SOME_QUERY}
  variables={{
@@ -40,5 +41,8 @@ const apolloClient = new ApolloClient({ link: timeoutHttpLink });
 >
 // ...
 ```
+
+Note, if using this library against `@apollo/client@^3` and using Typescript, then you will need to set
+`"skipLibCheck": true` in your `tsconfig.json` or else this library will give you type errors.
 
 See [Apollo documentation](https://www.apollographql.com/client) for information on using the Apollo client.
