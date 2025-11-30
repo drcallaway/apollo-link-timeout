@@ -3,7 +3,7 @@
   "version": "5.0.2",
   "description": "Abort requests that take longer than a specified timeout period",
   "peerDependencies": {
-    "@apollo/client": "^3.0.0"
+    "@apollo/client": "^3.0.0 || ^4.0.0"
   },
   "devDependencies": {
     "@apollo/client": "^4.0.9",
