@@ -44,6 +44,6 @@ jobs:
           node-version: 20.x
 
       - run: yarn --ignore-scripts
-      - run: yarn add --dev @apollo/client@3 graphql@16
+      - run: yarn add --dev @apollo/client@3 graphql@16 --ignore-scripts
 
       - run: yarn test
