@@ -1,10 +1,38 @@
-import TimeoutLink from '../src/timeoutLink';
-import { ApolloLink, execute, Observable, HttpLink } from '@apollo/client/core';
+import {
+  ApolloClient,
+  ApolloLink,
+  type GraphQLRequest,
+  HttpLink,
+  InMemoryCache,
+  Observable,
+  execute,
+} from '@apollo/client/core';
 import gql from 'graphql-tag';
+import TimeoutLink from '../src/timeoutLink';
+import type { FetchResult } from '../src/types';
+
 
 const TEST_TIMEOUT = 100;
 
 const timeoutLink: TimeoutLink = new TimeoutLink(TEST_TIMEOUT);
+
+let apolloClientInstance: ApolloClient | null = null;
+const executeWrapper = (link: ApolloLink, operation: GraphQLRequest) => {
+  if (execute.length === 3 && !apolloClientInstance) {
+    const httpLink = new HttpLink({ uri: "/graphql" });
+    const timeoutHttpLink = timeoutLink.concat(httpLink);
+    apolloClientInstance = new ApolloClient({
+      link: timeoutHttpLink,
+      cache: new InMemoryCache(),
+    });
+  }
+  return execute.length === 3
+    // @ts-ignore
+    ? execute(link, operation, { client: apolloClientInstance })
+    // @ts-ignore
+    : execute(link, operation);
+};
+
 
 const [nodeMajor] = process.versions.node.split(".").map(Number);
 
@@ -20,7 +48,7 @@ let delay: number;
 
 const mockLink = new ApolloLink(() => {
   called++;
-  return new Observable(observer => {
+  return new Observable((observer) => {
     setTimeout(() => {
       observer.next({});
       observer.complete();
@@ -37,7 +65,7 @@ beforeEach(() => {
 test('short request does not timeout', done => {
   delay = 50;
 
-  execute(link, { query }).subscribe({
+  executeWrapper(link, { query }).subscribe({
     next() {
       expect(called).toBe(1);
       done();
@@ -52,12 +80,12 @@ test('short request does not timeout', done => {
 test('long request times out', done => {
   delay = 200;
 
-  execute(link, { query }).subscribe({
+  executeWrapper(link, { query }).subscribe({
     next() {
       expect('next called').toBeFalsy();
       done();
     },
-    error(error) {
+    error(error: Error & { timeout: number; statusCode: number }) {
       expect(error.message).toEqual('Timeout exceeded');
       expect(error.timeout).toEqual(100);
       expect(error.statusCode).toEqual(408);
@@ -70,7 +98,7 @@ test('configured value through context does not time out', done => {
   delay = 200;
   const configured = 500;
 
-  execute(link, { query, context: { timeout: configured } }).subscribe({
+  executeWrapper(link, { query, context: { timeout: configured } }).subscribe({
     next() {
       expect(called).toBe(1);
       done();
@@ -86,12 +114,12 @@ test('configured short value through context time out', done => {
   delay = 200;
   const configured = 100;
 
-  execute(link, { query, context: { timeout: configured } }).subscribe({
+  executeWrapper(link, { query, context: { timeout: configured } }).subscribe({
     next() {
       expect('next called').toBeFalsy();
       done();
     },
-    error(error) {
+    error(error: Error & { timeout: number; statusCode: number }) {
       expect(error.message).toEqual('Timeout exceeded');
       expect(error.timeout).toEqual(configured);
       expect(error.statusCode).toEqual(408);
@@ -108,7 +136,7 @@ test('aborted request does not timeout', done => {
 
   controller.abort();
 
-  execute(link, { query, context: { fetchOptions } }).subscribe({
+  executeWrapper(link, { query, context: { fetchOptions } }).subscribe({
     next() {
       expect(called).toBe(1);
       done();
@@ -142,6 +170,7 @@ if (nodeMajor >= 20) {
     const terminalLink = timeoutLink.concat(
       new HttpLink({
       uri: "https://example.com/graphql",
+        // @ts-ignore
         fetch: (_, { signal }) => {
           finalSignal = signal;
           return Promise.resolve(
@@ -153,22 +182,23 @@ if (nodeMajor >= 20) {
         },
       })
     );
-  
+
     let events: Array<
       | { type: "next"; result: unknown }
       | { type: "done" }
       | { type: "error"; error: unknown }
     > = [];
-    const subsciption = execute(terminalLink, {
-        query: subscription,
-      }).subscribe({
-      next: (result) => events.push({ type: "next", result }),
-      error: (error) => events.push({ type: "error", error }),
+    const subsciption = executeWrapper(
+      terminalLink,
+      { query: subscription },
+    ).subscribe({
+      next: (result: FetchResult) => events.push({ type: "next", result }),
+      error: (error: Error) => events.push({ type: "error", error }),
       complete: () => events.push({ type: "done" }),
     });
-  
+
     const writer = stream.writable.getWriter();
-  
+
     writer.write(`
 ---
 Content-Type: application/json
@@ -176,13 +206,13 @@ Content-Type: application/json
 {"data":{"chunk": "first"}}
 ---
     `.trim());
-  
+
     setTimeout(() => {
       expect(events).toStrictEqual([
         { type: "next", result: { data: { chunk: "first" } } },
       ]);
       subsciption.unsubscribe();
-  
+
       setTimeout(() => {
         expect(finalSignal?.aborted).toBeTruthy();
         done();
