@@ -56,7 +56,7 @@ export default class TimeoutLink extends ApolloLink {
 
     // create local observable with timeout functionality (unsubscibe from chain observable and
     // return an error if the timeout expires before chain observable resolves)
-    const localObservable = new Observable(observer => {
+    const localObservable = new Observable<FetchResult>(observer => {
       let timer: any;
 
       // listen to chainObservable for result and pass to localObservable if received before timeout
