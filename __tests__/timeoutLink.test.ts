@@ -100,6 +100,54 @@ test('configured short value through context time out', done => {
   });
 });
 
+test('configured value through prior link does not time out', done => {
+  delay = 200;
+  const configured = 500;
+
+  const configLink = new ApolloLink((operation, forward) => {
+    operation.setContext({ timeout: configured });
+    return forward(operation);
+  });
+
+  const testLink = configLink.concat(timeoutLink).concat(mockLink);
+
+  execute(testLink, { query }).subscribe({
+    next() {
+      expect(called).toBe(1);
+      done();
+    },
+    error() {
+      expect('error called').toBeFalsy();
+      done();
+    }
+  });
+});
+
+test('configured short value through prior link time out', done => {
+  delay = 200;
+  const configured = 100;
+
+  const configLink = new ApolloLink((operation, forward) => {
+    operation.setContext({ timeout: configured });
+    return forward(operation);
+  });
+
+  const testLink = configLink.concat(timeoutLink).concat(mockLink);
+
+  execute(testLink, { query }).subscribe({
+    next() {
+      expect('next called').toBeFalsy();
+      done();
+    },
+    error(error) {
+      expect(error.message).toEqual('Timeout exceeded');
+      expect(error.timeout).toEqual(configured);
+      expect(error.statusCode).toEqual(408);
+      done();
+    }
+  });
+});
+
 test('aborted request does not timeout', done => {
   delay = 200;
 
@@ -109,6 +157,38 @@ test('aborted request does not timeout', done => {
   controller.abort();
 
   execute(link, { query, context: { fetchOptions } }).subscribe({
+    next() {
+      expect(called).toBe(1);
+      done();
+    },
+    error() {
+      expect('error called').toBeFalsy();
+      done();
+    }
+  });
+});
+
+test('negative timeout via constructor disables timeout', done => {
+  delay = 150;
+
+  const testLink = new TimeoutLink(-1).concat(mockLink);
+
+  execute(testLink, { query }).subscribe({
+    next() {
+      expect(called).toBe(1);
+      done();
+    },
+    error() {
+      expect('error called').toBeFalsy();
+      done();
+    }
+  });
+});
+
+test('negative timeout via context disables timeout', done => {
+  delay = 150;
+
+  execute(link, { query, context: { timeout: -1 } }).subscribe({
     next() {
       expect(called).toBe(1);
       done();
