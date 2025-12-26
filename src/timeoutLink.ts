@@ -1,7 +1,11 @@
 // note, this import is modified when building for ESM via `script/fix_apollo_import.mjs`
-import { ApolloLink, Observable, type Operation, type NextLink, type FetchResult } from '@apollo/client/core';
+import { ApolloLink, Observable, type Operation, type FetchResult } from '@apollo/client/core';
 import type { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError.js';
+
+// NextLink was removed from apollo-client in v4 and replaced by ApolloLink.ForwardFunction,
+// but to maintain compatibility with both v3 and v4, we re-declare it here.
+type NextLink = (operation: Operation) => Observable<FetchResult>;
 
 const DEFAULT_TIMEOUT: number = 15000;
 
