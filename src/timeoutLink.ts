@@ -65,12 +65,12 @@ export default class TimeoutLink extends ApolloLink {
 
       // listen to chainObservable for result and pass to localObservable if received before timeout
       const subscription = chainObservable.subscribe(
-        (result: FetchResult) => {
+        (result) => {
           clearTimeout(timer);
           observer.next(result);
           observer.complete();
         },
-        (error: Error) => {
+        (error) => {
           clearTimeout(timer);
           observer.error(error);
           observer.complete();
