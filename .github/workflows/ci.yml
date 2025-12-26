@@ -55,3 +55,23 @@ jobs:
       - run: yarn build
 
       - run: yarn test
+
+  test-apollo4-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      - run: yarn --ignore-scripts
+      - run: yarn add --ignore-scripts --dev @apollo/client graphql rxjs
+
+      - run: yarn lint
+
+      - run: yarn build
+
+      - run: yarn test
