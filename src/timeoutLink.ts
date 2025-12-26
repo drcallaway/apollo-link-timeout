@@ -9,12 +9,6 @@ type NextLink = (operation: Operation) => Observable<FetchResult>;
 
 const DEFAULT_TIMEOUT: number = 15000;
 
-type Observer<T> = {
-  next: (value: T) => void;
-  error: (error: any) => void;
-  complete: () => void;
-}
-
 /**
  * Aborts the request if the timeout expires before the response is received.
  */
@@ -66,7 +60,7 @@ export default class TimeoutLink extends ApolloLink {
 
     // create local observable with timeout functionality (unsubscibe from chain observable and
     // return an error if the timeout expires before chain observable resolves)
-    const localObservable = new Observable<FetchResult>((observer: Observer<FetchResult>) => {
+    const localObservable = new Observable<FetchResult>((observer) => {
       let timer: any;
 
       // listen to chainObservable for result and pass to localObservable if received before timeout
