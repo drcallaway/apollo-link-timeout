@@ -9,12 +9,12 @@ on:
       - master
 
 jobs:
-  test:
+  test-apollo3:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x, 20.x, 22.x, 23.x]
+        node-version: [12.x, 14.x, 16.x, 20.x, 22.x, 24.x, 25.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +25,50 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - run: yarn --ignore-scripts
+
+      - run: yarn lint
+
+      - run: yarn build
+
+      - run: yarn test
+
+  test-apollo4:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 20.x, 22.x, 24.x, 25.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: yarn --ignore-scripts
+      - run: yarn add --ignore-scripts --dev @apollo/client@4.0.0 graphql@16.0.0 rxjs@^7.3.0
+
+      - run: yarn lint
+
+      - run: yarn build
+
+      - run: yarn test
+
+  test-apollo4-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      - run: yarn --ignore-scripts
+      - run: yarn add --ignore-scripts --dev @apollo/client graphql rxjs
 
       - run: yarn lint
 

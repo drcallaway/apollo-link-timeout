@@ -1,7 +1,11 @@
 // note, this import is modified when building for ESM via `script/fix_apollo_import.mjs`
-import { ApolloLink, Observable, type Operation, type NextLink, type FetchResult } from '@apollo/client/core';
+import { ApolloLink, Observable, type Operation, type FetchResult } from '@apollo/client/core';
 import type { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError.js';
+
+// NextLink was removed from apollo-client in v4 and replaced by ApolloLink.ForwardFunction,
+// but to maintain compatibility with both v3 and v4, we re-declare it here.
+type NextLink = (operation: Operation) => Observable<FetchResult>;
 
 const DEFAULT_TIMEOUT: number = 15000;
 
@@ -56,17 +60,17 @@ export default class TimeoutLink extends ApolloLink {
 
     // create local observable with timeout functionality (unsubscibe from chain observable and
     // return an error if the timeout expires before chain observable resolves)
-    const localObservable = new Observable<FetchResult>(observer => {
+    const localObservable = new Observable<FetchResult>((observer) => {
       let timer: any;
 
       // listen to chainObservable for result and pass to localObservable if received before timeout
       const subscription = chainObservable.subscribe(
-        result => {
+        (result) => {
           clearTimeout(timer);
           observer.next(result);
           observer.complete();
         },
-        error => {
+        (error) => {
           clearTimeout(timer);
           observer.error(error);
           observer.complete();
