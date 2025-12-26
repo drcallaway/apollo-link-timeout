@@ -48,7 +48,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - run: yarn --ignore-scripts
-      - run: yarn add --ignore-scripts --dev @apollo/client@4.0.0 graphql@16.0.0
+      - run: yarn add --ignore-scripts --dev @apollo/client@4.0.0 graphql@16.0.0 rxjs@7.3.0
 
       - run: yarn lint
 
