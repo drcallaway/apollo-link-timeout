@@ -31,23 +31,13 @@ const mockLink = new ApolloLink(() => {
 const link = timeoutLink.concat(mockLink);
 
 const client = new ApolloClient({
-  link,
+  link: link,
   cache: new InMemoryCache(),
 });
-
-let apolloClientInstance: ApolloClient | null = null;
 const executeWrapper = (link: ApolloLink, operation: GraphQLRequest) => {
-  if (execute.length === 3 && !apolloClientInstance) {
-    const httpLink = new HttpLink({ uri: "/graphql" });
-    const timeoutHttpLink = timeoutLink.concat(httpLink);
-    apolloClientInstance = new ApolloClient({
-      link: timeoutHttpLink,
-      cache: new InMemoryCache(),
-    });
-  }
   return execute.length === 3
     // @ts-ignore
-    ? execute(link, operation, { client: apolloClientInstance })
+    ? execute(link, operation, { client })
         // @ts-ignore
     : execute(link, operation);
 };
