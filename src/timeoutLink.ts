@@ -10,9 +10,9 @@ type NextLink = (operation: Operation) => Observable<FetchResult>;
 const DEFAULT_TIMEOUT: number = 15000;
 
 type Observer<T> = {
-  next?: (value: T) => void;
-  error?: (error: any) => void;
-  complete?: () => void;
+  next: (value: T) => void;
+  error: (error: any) => void;
+  complete: () => void;
 }
 
 /**

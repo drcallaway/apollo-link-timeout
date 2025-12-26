@@ -1,6 +1,7 @@
 import TimeoutLink from '../src/timeoutLink';
-import { ApolloClient, ApolloLink, execute, type GraphQLRequest, HttpLink, InMemoryCache, Observable, } from '@apollo/client/core';
+import { ApolloClient, ApolloLink, execute, FetchResult, type GraphQLRequest, HttpLink, InMemoryCache, Observable, } from '@apollo/client/core';
 import gql from 'graphql-tag';
+import TimeoutError from '../src/TimeoutError';
 
 const TEST_TIMEOUT = 100;
 
@@ -18,9 +19,15 @@ const query = gql`
 let called: number;
 let delay: number;
 
+type Observer<T> = {
+  next: (value: T) => void;
+  error: (error: any) => void;
+  complete: () => void;
+}
+
 const mockLink = new ApolloLink(() => {
   called++;
-  return new Observable(observer => {
+  return new Observable<FetchResult>((observer: Observer<FetchResult>) => {
     setTimeout(() => {
       observer.next({});
       observer.complete();
@@ -69,7 +76,7 @@ test('long request times out', done => {
       expect('next called').toBeFalsy();
       done();
     },
-    error(error) {
+    error(error: TimeoutError) {
       expect(error.message).toEqual('Timeout exceeded');
       expect(error.timeout).toEqual(100);
       expect(error.statusCode).toEqual(408);
@@ -103,7 +110,7 @@ test('configured short value through context time out', done => {
       expect('next called').toBeFalsy();
       done();
     },
-    error(error) {
+    error(error: TimeoutError) {
       expect(error.message).toEqual('Timeout exceeded');
       expect(error.timeout).toEqual(configured);
       expect(error.statusCode).toEqual(408);
@@ -151,7 +158,7 @@ test('configured short value through prior link time out', done => {
       expect('next called').toBeFalsy();
       done();
     },
-    error(error) {
+    error(error: TimeoutError) {
       expect(error.message).toEqual('Timeout exceeded');
       expect(error.timeout).toEqual(configured);
       expect(error.statusCode).toEqual(408);
@@ -255,8 +262,8 @@ if (nodeMajor >= 20) {
     const subsciption = executeWrapper(terminalLink, {
         query: subscription,
       }).subscribe({
-      next: (result) => events.push({ type: "next", result }),
-      error: (error) => events.push({ type: "error", error }),
+      next: (result: FetchResult) => events.push({ type: "next", result }),
+      error: (error: TimeoutError ) => events.push({ type: "error", error }),
       complete: () => events.push({ type: "done" }),
     });
 
