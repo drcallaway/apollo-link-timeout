@@ -1,5 +1,5 @@
 // note, this import is modified when building for ESM via `script/fix_apollo_import.mjs`
-import { ApolloLink, Observable, type Operation, type FetchResult, type Observer } from '@apollo/client/core';
+import { ApolloLink, Observable, type Operation, type FetchResult } from '@apollo/client/core';
 import type { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError.js';
 
@@ -8,6 +8,12 @@ import TimeoutError from './TimeoutError.js';
 type NextLink = (operation: Operation) => Observable<FetchResult>;
 
 const DEFAULT_TIMEOUT: number = 15000;
+
+type Observer<T> = {
+  next?: (value: T) => void;
+  error?: (error: any) => void;
+  complete?: () => void;
+}
 
 /**
  * Aborts the request if the timeout expires before the response is received.
